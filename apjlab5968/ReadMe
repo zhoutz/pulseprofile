@@ -1,0 +1,59 @@
+================================================================================
+Title: Constraining the Neutron Star Mass-Radius Relation and Dense Matter 
+       Equation of State With NICER. II. Emission From Hot Spots on a 
+       Rapidly Rotating Neutron Star 
+Authors: Bogdanov S., Lamb F.K., Mahmoodifar S., Miller M.C., Morsink S.M., 
+         Riley T.E., Strohmayer T.E., Tung A.K., Watts A.L., Dittmann A.J., 
+         Chakrabarty D., Guillot S., Arzoumanian Z., Gendreau K.C. 
+================================================================================
+Description of contents: The tar.gz file provided includes output in ascii 
+ format from one of the codes used in the comparison tests shown in Figures 3 
+ through 13. These files are being provided to the community to facilitate 
+ testing of other independently developed ray-tracing codes. 
+
+System requirements: None.
+
+Additional comments: There are 24 files. A brief description of each type is
+ given below.
+
+ There are 6 files labeled "SD1*_test_IM.txt" where "*" goes from "a" to "f".
+ These are two column tables that show the rotational pulse phase (column #1) 
+ and the photon flux (column #2) in units of photons/cm^2/s/keV See Table 1 for 
+ the parameter values of these code runs.
+
+ There are 4 files labeled "SD2*_test_GSFCS.txt" where "*" goes from "a" to "d".
+ These have 3 columns and list the rotational pulse phase (column #1), the 
+ photon energy in keV as measured by the observer (column #2), and the 
+ monochromatic photon flux (column #3) at that combination of pulse phase and 
+ photon energy in units of photons/cm^2/s/keV. Table 2 gives the parameter 
+ values for the 4 models used to produce these results.
+
+ There are 10 files labeled "OS1*_test_IM.txt" where "*" goes from "a" to "j".
+ These are two column tables that list the rotational pulse phase (column #1) 
+ and the monochromatic photon flux (column #2) at 1 keV in units of 
+ photons/cm^2/s/keV. Table 3 and 4 list the model parameters used to produce 
+ these synthetic pulse profiles.
+
+ Two additional files "OS1k_test_GSFCS.txt" and "OS1l_test_GSFCS.txt" have
+ three columns and give the rotational pulse phase (column #1), the photon 
+ energy in keV as measured by the observer (column #2),  and the monochromatic 
+ photon flux (column #3) at that combination of pulse phase and photon energy 
+ in units of photons/cm^2/s/keV. The last two columns of Table 4 provides the 
+ parameters used to produce the output contained in these files.
+
+ The file "deflection_angle_lensing_factor_test_CU.txt" is a three column table
+ of the calculated light ray deflection angle (\psi) and "lensing factor" 
+ (d\cos\alpha/d\cos\psi) shown in Figure 3. The first column in the file gives
+ the deflection angle (\psi), the second column gives the angle between the 
+ radial direction and the initial direction of the light ray (\alpha), and the 
+ third column gives the value of the lensing factor (d\cos\alpha/d\cos\psi).
+
+ Finally, the file "travel_time_delay_test_CU.txt" is another three column
+ table that provides one output of the calculation of the the travel time delay 
+ integral from Equation (18) that is shown in Figure 4. The first column in 
+ the file gives the deflection angle (\psi), the second column gives the angle 
+ between the radial direction and the initial direction of the light ray 
+ (\alpha), and the third column gives the travel time delay in seconds 
+ relative to a radial ray.
+
+================================================================================
