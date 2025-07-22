@@ -14,7 +14,7 @@ cos_psi_min = -0.9
 cos_psi_max = 1.0
 N_cos_psi_grid = 512
 
-N_dalpha = N_cos_psi_grid * 8
+d_alpha = np.pi / (N_cos_psi_grid * 8)
 
 cos_alpha_min = -0.1
 cos_alpha_max = 1.0
@@ -73,9 +73,7 @@ lf_of_u_cos_psi = np.zeros((N_u_grid, N_cos_psi_grid))
 for u_id, u in enumerate(output_u_grid):
     print(f"Processing u = {u:.3f} ({u_id + 1}/{len(output_u_grid)})")
     alpha_grid, psi_grid = [], []
-    alpha_min = 0
-    d_alpha = np.pi / N_dalpha
-    alpha = alpha_min
+    alpha = 0
     while True:
         alpha_grid.append(alpha)
         psi_grid.append(cal_psi(u, alpha))
