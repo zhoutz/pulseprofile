@@ -1,1 +1,4 @@
 lensing_table/
+/*.txt
+/*.png
+build/

@@ -9,6 +9,8 @@ BreakBinaryOperations: RespectPrecedence
 AllowAllArgumentsOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
 IncludeBlocks: Preserve
+AlignOperands: AlignAfterOperator
+BreakBeforeTernaryOperators: true
 
 DerivePointerAlignment: false
 PointerAlignment: Left
