@@ -53,7 +53,7 @@ def cal_psi1(u, alpha):
 def cal_psi2(u, alpha):
     s = np.sin(alpha)
     tmp = (2 * s) / np.sqrt(3 * (1 - u))
-    p_over_R = -tmp * np.cos((np.acos(3 * u / tmp) + 2 * np.pi) / 3)
+    p_over_R = -tmp * np.cos((np.arccos(3 * u / tmp) + 2 * np.pi) / 3)
     psi_max = cal_psi1(u / p_over_R, np.pi / 2)
     psi1 = cal_psi1(u, np.pi - alpha)
     return 2 * psi_max - psi1
@@ -121,7 +121,7 @@ def cal_cdt_over_R1(u, alpha):
 def cal_cdt_over_R2(u, alpha):
     s = np.sin(alpha)
     tmp = (2 * s) / np.sqrt(3 * (1 - u))
-    p_over_R = -tmp * np.cos((np.acos(3 * u / tmp) + 2 * np.pi) / 3)
+    p_over_R = -tmp * np.cos((np.arccos(3 * u / tmp) + 2 * np.pi) / 3)
     dt_max = cal_cdt_over_R1(u / p_over_R, np.pi / 2)
     dt1 = cal_cdt_over_R1(u, np.pi - alpha)
     return 2 * dt_max - dt1
