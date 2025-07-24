@@ -5,12 +5,13 @@
 #include <vector>
 #include "grid.hpp"
 #include "lensing_table.hpp"
-#include "sd.hpp"
+#include "os.hpp"
 #include "unit.hpp"
 #include "ut.hpp"
 
 double frequency_nu, spot_center_theta, obs_theta, angular_radius;
 std::string ss;
+char beaming;
 
 int
 main(int argc, char* argv[]) {
@@ -18,17 +19,28 @@ main(int argc, char* argv[]) {
     std::cout
         << "Usage: "
         << argv[0]
-        << " <frequency_nu> <spot_center_theta> <obs_theta> <angular_radius> <a-f>\n";
+        << " <frequency_nu> <spot_center_theta> <obs_theta> <angular_radius> <a-j>\n";
   } else {
     frequency_nu = std::atof(argv[1]);
     spot_center_theta = std::atof(argv[2]) * degree;
     obs_theta = std::atof(argv[3]) * degree;
     angular_radius = std::atof(argv[4]);
     ss = argv[5];
+
+    if ('a' <= ss[0] && ss[0] <= 'f') {
+      beaming = 'i';  // isotropic
+    } else if (ss[0] == 'g' || ss[0] == 'i') {
+      beaming = 'c';  // cos
+    } else if (ss[0] == 'h' || ss[0] == 'j') {
+      beaming = 's';  // sin
+    } else {
+      std::cerr << "Beaming must be [a-f] for isotropic, [g,i] for cos, or [h,j] for sin.\n";
+      return 1;
+    }
   }
 
   constexpr double M = 1.4;      // M_sun;
-  constexpr double R = 12;       // km
+  constexpr double Re = 12;      // km
   constexpr double kT = 0.35;    // keV
   constexpr double E_obs = 1.0;  // keV
   constexpr double D = 0.2 * kpc_in_km;
@@ -41,7 +53,7 @@ main(int argc, char* argv[]) {
 #define USE_HEALPIX
 
 #ifdef USE_HEALPIX
-  int N_side = 128;
+  int N_side = 256;
 #else
   int N_theta = 800;
   int N_phi = N_theta;
@@ -56,22 +68,23 @@ main(int argc, char* argv[]) {
 #endif
 
   auto time_start = std::chrono::high_resolution_clock::now();
-  auto total_flux = CalculateTotalFluxSD(
+  auto total_flux = CalculateTotalFluxOS(
       lt,
       source,
       output_phase_grid,
       output_E_grid,
       M,
-      R,
+      Re,
       D,
       frequency_nu,
-      obs_theta
+      obs_theta,
+      beaming
   );
   auto time_end = std::chrono::high_resolution_clock::now();
   double t_ms = std::chrono::duration<double, std::milli>(time_end - time_start).count();
   std::cout << "Time taken: " << t_ms << " ms\n";
 
-  std::ofstream out_file("sd1" + ss + ".txt");
+  std::ofstream out_file("os1" + ss + ".txt");
   out_file << std::setprecision(16);
 
   for (double output_phase : output_phase_grid) {

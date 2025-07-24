@@ -1,4 +1,4 @@
-cpu_executables := sd1
+cpu_executables := sd1 os1
 cpu_headers := $(wildcard cpu/*)
 
 ifneq (command line,$(origin CXX))

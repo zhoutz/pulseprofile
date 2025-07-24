@@ -16,7 +16,7 @@ N_cos_psi_grid = 512
 
 d_alpha = np.pi / (N_cos_psi_grid * 8)
 
-cos_alpha_min = -0.1
+cos_alpha_min = -0.2
 cos_alpha_max = 1.0
 N_cos_alpha_grid = 512
 
