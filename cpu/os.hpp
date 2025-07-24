@@ -32,7 +32,6 @@ CalculateTotalFluxOS(
   double sin_obs_theta = std::sin(obs_theta);
 
   int N_phase = output_phase_grid.size() * 3;
-  int N_E = output_E_grid.size();
 
   std::vector<double> fluxes_over_I(N_phase + 1), redshift_factors(N_phase + 1);
   std::vector<double> phase_s(N_phase + 1), phase_o(N_phase + 1);
