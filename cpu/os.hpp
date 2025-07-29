@@ -125,7 +125,8 @@ CalculateTotalFluxOS(
           beaming_factor = cos_sigma_prime * cos_sigma_prime;
         }
 
-        fluxes_over_I[i_phase] = uu * delta3 * cos_sigma * lf * dS / D2 * beaming_factor;
+        fluxes_over_I[i_phase] =
+            uu * delta3 * cos_sigma_prime * lf * (dS * gamma) / D2 * beaming_factor;
         redshift_factors[i_phase] = 1. / (delta * uu);
         phase_o[i_phase] = phase + delta_phase;
       } while (0);
