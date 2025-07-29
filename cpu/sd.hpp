@@ -80,7 +80,8 @@ CalculateTotalFluxSD(
         double dt1 = cdt_over_R * R / c_in_km_s;
         double delta_phase = dt1 * frequency_nu;
 
-        fluxes_over_I[i_phase] = uu * delta3 * cos_alpha * lf * dS / D2 / gamma;
+        double cos_alpha_prime = cos_alpha * delta;
+        fluxes_over_I[i_phase] = uu * delta3 * cos_alpha_prime * lf * (dS * gamma) / D2;
         redshift_factors[i_phase] = 1. / (delta * uu);
         phase_o[i_phase] = phase + delta_phase;
       } while (0);
