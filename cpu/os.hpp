@@ -125,8 +125,15 @@ CalculateTotalFluxOS(
           beaming_factor = cos_sigma_prime * cos_sigma_prime;
         }
 
+#if 0  // change 0 to 1 to enable another code block
+       // This is the analytic formula used in Bogdanov 2019
         fluxes_over_I[i_phase] =
             uu * delta3 * cos_sigma_prime * lf * (dS * gamma) / D2 * beaming_factor;
+#else
+        // But we can only reproduce morsink's numerical results using the following formula
+        fluxes_over_I[i_phase] = uu * delta3 * cos_sigma * lf * (dS) / D2 * beaming_factor;
+#endif
+
         redshift_factors[i_phase] = 1. / (delta * uu);
         phase_o[i_phase] = phase + delta_phase;
       } while (0);
