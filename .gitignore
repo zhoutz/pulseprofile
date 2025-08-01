@@ -3,3 +3,5 @@ lensing_table/
 /*.png
 build/
 tmp/
+model_data/
+.DS_Store
