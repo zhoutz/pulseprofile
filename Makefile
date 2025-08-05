@@ -1,4 +1,4 @@
-cpu_executables := sd1 os1 t_instrument
+cpu_executables := sd1 os1 t_instrument t_interstellar
 cpu_headers := $(wildcard cpu/*)
 
 ifneq (command line,$(origin CXX))

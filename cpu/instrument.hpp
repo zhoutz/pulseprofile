@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdio>
+#include <cstdlib>
 #include <fstream>
 #include <vector>
 #include "matrix.hpp"
@@ -32,7 +33,7 @@ struct Instrument {
       std::ifstream arf_file(arf_file_path);
       if (!arf_file) {
         printf("Error opening ARF file: %s\n", arf_file_path);
-        return;
+        std::exit(EXIT_FAILURE);
       }
       Eo.resize(n_Eo);
       while (arf_skiprows--) arf_file.ignore(streamsize, '\n');
@@ -62,7 +63,7 @@ struct Instrument {
       std::ifstream rmf_file(rmf_file_path);
       if (!rmf_file) {
         printf("Error opening RMF file: %s\n", rmf_file_path);
-        return;
+        std::exit(EXIT_FAILURE);
       }
       while (rmf_skiprows--) rmf_file.ignore(streamsize, '\n');
 
