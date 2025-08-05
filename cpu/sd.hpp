@@ -82,13 +82,14 @@ CalculateTotalFluxSD(
 
         double cos_alpha_prime = cos_alpha * delta;
 
-#if 0  // change 0 to 1 to enable another code block
-       // This is the analytic formula used in Bogdanov 2019
-        fluxes_over_I[i_phase] = uu * delta3 * cos_alpha_prime * lf * (dS * gamma) / D2;
-#else
-        // But we can only reproduce morsink's numerical results using the following formula
+        // This is the analytic formula used in Bogdanov 2019
+        // fluxes_over_I[i_phase] = uu * delta3 * cos_alpha_prime * lf * (dS * gamma) / D2;
+
+        // But we can only reproduce sharon's numerical results using the following formula
         fluxes_over_I[i_phase] = uu * delta3 * cos_alpha * lf * (dS) / D2;
-#endif
+
+        // we can only reproduce bogdanov's numerical results using the following formula
+        // fluxes_over_I[i_phase] = uu * delta3 * cos_alpha * lf * (dS / gamma) / D2;
 
         redshift_factors[i_phase] = 1. / (delta * uu);
         phase_o[i_phase] = phase + delta_phase;
