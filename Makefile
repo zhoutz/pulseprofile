@@ -1,5 +1,6 @@
 cpu_executables := sd1 os1
 cpu_executables += t_instrument t_interstellar t_nsx
+cpu_executables += RingEq
 cpu_headers := $(wildcard cpu/*)
 
 ifneq (command line,$(origin CXX))

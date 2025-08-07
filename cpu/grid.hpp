@@ -189,6 +189,120 @@ CapSourceHP(double spot_center_theta, double spot_angular_radius, double kT_in_k
   return grid;
 }
 
+inline bool
+IsInside(
+    double patch_theta,
+    double patch_phi,
+
+    double disk_center_theta,
+    double disk_center_phi,
+    double disk_angular_radius
+) {
+  double s1 = std::sin(disk_center_theta);
+  double c1 = std::cos(disk_center_theta);
+  double c2 = std::cos(patch_theta);
+  double s2 = std::sin(patch_theta);
+  double cos_rho = s1 * s2 * std::cos(patch_phi - disk_center_phi) + c1 * c2;
+  return cos_rho > std::cos(disk_angular_radius);
+}
+
+struct DiskDifference {
+  double theta1;
+  double phi1;
+  double angrad1;
+  double theta2;
+  double phi2;
+  double angrad2;
+  double t;
+
+  double
+  operator()(double theta, double phi) const {
+    if (IsInside(theta, phi, theta1, phi1, angrad1)
+        && !IsInside(theta, phi, theta2, phi2, angrad2)) {
+      return t;
+    } else {
+      return 0.;
+    }
+  }
+};
+
+struct DiskIntersection {
+  double theta1, theta2, phi1, phi2, angrad1, angrad2;
+  double t;
+
+  double
+  operator()(double theta, double phi) const {
+    if (IsInside(theta, phi, theta1, phi1, angrad1)
+        && IsInside(theta, phi, theta2, phi2, angrad2)) {
+      return t;
+    } else {
+      return 0.;
+    }
+  }
+};
+
+template <typename F>
+inline Grid
+GenerateHealpixGrid(int N_side, F&& temp_func) {
+  double dOmega = pi / (3. * N_side * N_side);
+
+  auto cal_z_phi_ = [N_side](int i, int j) {
+    if (1 <= i && i < N_side && 1 <= j && j <= 4 * i) {
+      double z = 1. - 1. * i * i / (3. * N_side * N_side);
+      double s = 1.;
+      double phi = pi / (2. * i) * (j - s / 2.);
+      return std::make_pair(z, phi);
+    } else if (N_side <= i && i <= 2 * N_side && 1 <= j && j <= 4 * N_side) {
+      double z = 4. / 3. - 2. * i / (3. * N_side);
+      double s = (i - N_side + 1) % 2;
+      double phi = pi / (2. * N_side) * (j - s / 2.);
+      return std::make_pair(z, phi);
+    } else {
+      std::printf("In CapSourceHP, i: %d, j: %d is out of range.\n", i, j);
+      std::exit(1);
+    }
+  };
+
+  auto cal_z_phi = [N_side, cal_z_phi_](int i, int j) {
+    if (i <= 2 * N_side) {
+      return cal_z_phi_(i, j);
+    } else {
+      i = 4 * N_side - i;
+      auto [z, phi] = cal_z_phi_(i, j);
+      return std::make_pair(-z, phi);
+    }
+  };
+
+  Grid grid;
+  for (int i = 1; i <= 4 * N_side - 1; ++i) {
+    Ring ring{
+        .cos_theta = -999,
+        .dOmega = dOmega,
+        .patches = {},
+    };
+    int jmax = 4 * std::min({i, 4 * N_side - i, N_side});
+    for (int j = 1; j <= jmax; ++j) {
+      auto [cos_theta, phi] = cal_z_phi(i, j);
+      ring.cos_theta = cos_theta;
+
+      double t = temp_func(std::acos(cos_theta), phi);
+
+      if (t != 0) {
+        ring.patches.push_back(
+            Patch{
+                .phi = phi,
+                .kT_in_keV = t,
+            }
+        );
+      }
+    }
+    if (!ring.patches.empty()) {
+      grid.push_back(std::move(ring));
+    }
+  }
+  return grid;
+}
+
 // inline void
 // print_grid(Grid const& grid) {
 //   for (auto const& ring : grid) {

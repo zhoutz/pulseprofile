@@ -9,6 +9,7 @@
 struct Instrument {
   std::vector<double> Eo;
   Matrix RSP;
+  int n_ch;
 
   Instrument(
       char const* arf_file_path,
@@ -22,7 +23,7 @@ struct Instrument {
   ) {
     constexpr auto streamsize = std::numeric_limits<std::streamsize>::max();
 
-    int n_ch = ch_end - ch_beg;
+    n_ch = ch_end - ch_beg;
     int n_Eo = Eo_end - Eo_beg;
 
     RSP.reset(n_ch, n_Eo);
