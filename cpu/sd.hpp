@@ -29,8 +29,9 @@ CalculateTotalFluxSD(
 
   int N_phase = output_phase_grid.size() * 3;
 
-  std::vector<double> fluxes_over_I(N_phase + 1), redshift_factors(N_phase + 1);
-  std::vector<double> phase_s(N_phase + 1), phase_o(N_phase + 1);
+  std::vector<double> fluxes_over_I(N_phase + 1);
+  std::vector<double> redshift_factors(N_phase + 1);
+  std::vector<double> phase_o(N_phase + 1);
 
   VecHunt phase_o_hunt{phase_o};
 
@@ -53,7 +54,6 @@ CalculateTotalFluxSD(
       bool is_visible = true;
       do {
         double phase = 1. * i_phase / N_phase;
-        phase_s[i_phase] = phase;
         double spot_phi = two_pi * phase;
         double cos_spot_phi = std::cos(spot_phi);
         double sin_spot_phi = std::sin(spot_phi);
@@ -82,14 +82,12 @@ CalculateTotalFluxSD(
 
         double cos_alpha_prime = cos_alpha * delta;
 
-        // This is the analytic formula used in Bogdanov 2019
+        // This is the analytic formula used in Bogdanov2019
+        // and it is consistent with the sharon's results
         // fluxes_over_I[i_phase] = uu * delta3 * cos_alpha_prime * lf * (dS * gamma) / D2;
 
-        // But we can only reproduce sharon's numerical results using the following formula
-        fluxes_over_I[i_phase] = uu * delta3 * cos_alpha * lf * (dS) / D2;
-
-        // we can only reproduce bogdanov's numerical results using the following formula
-        // fluxes_over_I[i_phase] = uu * delta3 * cos_alpha * lf * (dS / gamma) / D2;
+        // but we can only reproduce Bogdanov's numerical results using the following formula
+        fluxes_over_I[i_phase] = uu * delta3 * cos_alpha_prime * lf * (dS) / D2;
 
         redshift_factors[i_phase] = 1. / (delta * uu);
         phase_o[i_phase] = phase + delta_phase;
@@ -117,20 +115,8 @@ CalculateTotalFluxSD(
       }
     }
 
-    // https://numpy.org/doc/stable/reference/generated/numpy.gradient.html
-    for (int i_phase = 0; i_phase < N_phase; ++i_phase) {
-      double hs = i_phase == 0 ? phase_o[0] + 1. - phase_o[N_phase - 1]
-                               : phase_o[i_phase] - phase_o[i_phase - 1];
-      double hd = i_phase == N_phase - 1 ? phase_o[0] + 1. - phase_o[N_phase - 1]
-                                         : phase_o[i_phase + 1] - phase_o[i_phase];
-      double df = 1. / N_phase;
-      double d_phase_s_d_phase_o = df * (hs * hs + hd * hd) / (hs * hd * (hs + hd));
-      fluxes_over_I[i_phase] *= d_phase_s_d_phase_o;
-    }
-
     fluxes_over_I[N_phase] = fluxes_over_I[0];
     redshift_factors[N_phase] = redshift_factors[0];
-    phase_s[N_phase] = 1.0;
     phase_o[N_phase] = 1.0 + phase_o[0];
 
     for (int i_output_phase = 0; i_output_phase < output_phase_grid.size(); ++i_output_phase) {

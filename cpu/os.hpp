@@ -125,12 +125,8 @@ CalculateTotalFluxOS(
           beaming_factor = cos_sigma_prime * cos_sigma_prime;
         }
 
-        // This is the analytic formula used in Bogdanov 2019
-        // fluxes_over_I[i_phase] =
-        //     uu * delta3 * cos_sigma_prime * lf * (dS * gamma) / D2 * beaming_factor;
-
-        // But we can only reproduce sharon's numerical results using the following formula
-        fluxes_over_I[i_phase] = uu * delta3 * cos_sigma * lf * (dS) / D2 * beaming_factor;
+        fluxes_over_I[i_phase] =
+            uu * delta3 * cos_sigma_prime * lf * (dS * gamma) / D2 * beaming_factor;
 
         redshift_factors[i_phase] = 1. / (delta * uu);
         phase_o[i_phase] = phase + delta_phase;
@@ -159,15 +155,15 @@ CalculateTotalFluxOS(
     }
 
     // https://numpy.org/doc/stable/reference/generated/numpy.gradient.html
-    for (int i_phase = 0; i_phase < N_phase; ++i_phase) {
-      double hs = i_phase == 0 ? phase_o[0] + 1. - phase_o[N_phase - 1]
-                               : phase_o[i_phase] - phase_o[i_phase - 1];
-      double hd = i_phase == N_phase - 1 ? phase_o[0] + 1. - phase_o[N_phase - 1]
-                                         : phase_o[i_phase + 1] - phase_o[i_phase];
-      double df = 1. / N_phase;
-      double d_phase_s_d_phase_o = df * (hs * hs + hd * hd) / (hs * hd * (hs + hd));
-      fluxes_over_I[i_phase] *= d_phase_s_d_phase_o;
-    }
+    // for (int i_phase = 0; i_phase < N_phase; ++i_phase) {
+    //   double hs = i_phase == 0 ? phase_o[0] + 1. - phase_o[N_phase - 1]
+    //                            : phase_o[i_phase] - phase_o[i_phase - 1];
+    //   double hd = i_phase == N_phase - 1 ? phase_o[0] + 1. - phase_o[N_phase - 1]
+    //                                      : phase_o[i_phase + 1] - phase_o[i_phase];
+    //   double df = 1. / N_phase;
+    //   double d_phase_s_d_phase_o = df * (hs * hs + hd * hd) / (hs * hd * (hs + hd));
+    //   fluxes_over_I[i_phase] *= d_phase_s_d_phase_o;
+    // }
 
     fluxes_over_I[N_phase] = fluxes_over_I[0];
     redshift_factors[N_phase] = redshift_factors[0];
